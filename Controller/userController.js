@@ -1,0 +1,62 @@
+const bcrypt = require("bcryptjs")
+const jwt = require("jsonwebtoken")
+const userModel = require("../Model/userModel")
+const moment = require("moment-timezone");
+
+
+exports.userRegister = async(req,res)=>{
+    const {name,email,password} = req.body
+    try{
+        const userExist = await userModel.findOne({ email });
+        if(userExist) return res.status(400).json({message:"user already exist,please try with another password"})
+
+        const salt = 10 
+        const hashedpass = await bcrypt.hash(password,salt)
+
+        const newuser =  new userModel({
+            name,
+            email,
+            password:hashedpass,
+            profileImg: "",
+            createdAt: moment(userModel.createdAt).tz("Asia/Kolkata").format(),
+            updatedAt: moment(userModel.updatedAt).tz("Asia/Kolkata").format()
+
+        })
+        const savedata = await newuser.save()
+        const token = await jwt.sign({id:newuser._id},process.env.JWT_SECRET,{ expiresIn: '1h' })
+        res.cookie("token", token, {
+            httpOnly: true,
+            secure: true,
+            sameSite: 'strict',
+            maxAge: 60 * 60 * 1000
+        })
+        res.json({ success: true, message: "user is registered" })
+    }
+    catch(error){
+         res.status(400).json({ message: error });
+         console.log(error);  
+    }
+}
+
+exports.userLogin =  async(req,res)=>{
+    const {email,password} = req.body
+    try{
+     const getUser = await userModel.findOne({email})
+     if(!getUser) return res.status(404).json({message:"user not found"})
+     const match = await bcrypt.compare(password,getUser.password)
+     if(!match) return res.status(400).json({message:"Invalid details"})
+         const token = await jwt.sign({id:getUser._id},process.env.JWT_SECRET,{ expiresIn: '1h' })
+        res.cookie("token", token, {
+            httpOnly: true,
+            secure: true,
+            sameSite: 'strict',
+            maxAge: 60 * 60 * 1000
+        })
+        res.json({ success: true, message: "login succesfull" })
+    }
+    catch(error){
+        res.status(500).json({message:"internal server errror"})
+        console.log(error)
+    }
+}
+
