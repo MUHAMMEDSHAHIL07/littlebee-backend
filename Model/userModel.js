@@ -24,19 +24,9 @@ const userSchema = new mongoose.Schema({
         type: Boolean,
         default: false
     },
-    profileImg: {
-        type: String,
-    },
     isActive: {
         type: Boolean,
         default: true
-    },
-    resetToken:{
-        type:String,
-        default:""
-    },
-    resetTokenExpery:{
-        type:Date
     },
     createdAt: {
         type: String
