@@ -45,3 +45,16 @@ exports.Order = async (req, res) => {
         res.status(500).json("server error" + error)
     }
 }
+exports.getOrder = async(req,res)=>{
+    const userId = req.user.id
+    try{
+        const orderItem = await orderModel.find({orderBy:userId}).populate("orderBy")
+        if(!orderItem){
+            return res.status(404).json({message:"no orders"})
+        }
+        res.status(200).json({order:orderItem})
+    }
+    catch(error){
+        res.status(500).json({message:"failed to get"})
+    }
+}

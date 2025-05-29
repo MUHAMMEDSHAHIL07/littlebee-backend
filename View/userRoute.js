@@ -5,7 +5,7 @@ const {userRegister, userLogin, resetPassword} = require("../Controller/User-sid
 const {allProduct, productId, productCategory} = require("../Controller/User-side/productController")
 const { jwtMiddleware } = require("../middleware/authMiddleware")
 const { addTocart, getCart } = require("../Controller/User-side/cartController")
-const { Order } = require("../Controller/User-side/orderContoller")
+const { Order, getOrder } = require("../Controller/User-side/orderContoller")
 
 router.post("/register",userRegister)
 router.post("/login",userLogin)
@@ -16,5 +16,5 @@ router.get("/category/:categoryName",productCategory)
 router.post("/addtocart",jwtMiddleware,addTocart)
 router.get("/getCart",jwtMiddleware,getCart)
 router.post("/order",jwtMiddleware,Order)
-
+router.get("/getOrder",jwtMiddleware,getOrder)
 module.exports=router
