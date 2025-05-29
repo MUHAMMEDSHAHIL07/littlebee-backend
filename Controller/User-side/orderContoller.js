@@ -50,7 +50,7 @@ exports.getOrder = async(req,res)=>{
     try{
         const orderItem = await orderModel.find({orderBy:userId}).populate("orderBy")
         if(!orderItem){
-            return res.status(404).json({message:"no orders"})
+            return res.status(404).json({message:"no orders found"})
         }
         res.status(200).json({order:orderItem})
     }
