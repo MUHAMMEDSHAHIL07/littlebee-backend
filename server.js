@@ -12,7 +12,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieparser())
 app.use(cors());
-app.use("/api/user", userRouter);
+app.use("/api/user/", userRouter);
 
 mongoose.connect(process.env.MONGO_URI)
 .then(() => {
