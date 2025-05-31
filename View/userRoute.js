@@ -17,4 +17,5 @@ router.post("/addtocart",jwtMiddleware,addTocart)
 router.get("/getCart",jwtMiddleware,getCart)
 router.post("/order",jwtMiddleware,Order)
 router.get("/getOrder",jwtMiddleware,getOrder)
+
 module.exports=router
