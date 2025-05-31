@@ -52,7 +52,7 @@ exports.addProduct = async(req,res)=>{
         const {name,description,price,category,gender,stock} = req.body
         const image = req.file ? req.file.path : null;
         if(!name||!description||!price){
-            return res.status(400).json({message:"fill all field"})
+            return res.status(400).json({message:"fill all the field"})
         }
         const newProduct = new Product({
         name,
@@ -65,7 +65,7 @@ exports.addProduct = async(req,res)=>{
     })
     await newProduct.save()
     res.status(201).json({
-        message:"product added succesfull"
+        message:"product added succesfully"
     })
     }
     catch(error){
