@@ -86,7 +86,7 @@ exports.getAllProduct = async(req,res)=>{
 exports.getCategory = async(req,res)=>{
     try{
         const categoryname = req.params.categoryName
-        const getproduct = await productModel.find({category:categoryname})
+        const getproduct = await Product.find({category:categoryname})
         if(getproduct==null) return res.status(404).json({message:"product not found"})
             res.json(getproduct)
         }
