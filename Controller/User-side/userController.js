@@ -1,7 +1,6 @@
 const bcrypt = require("bcryptjs")
 const jwt = require("jsonwebtoken")
 const userModel = require("../../Model/userModel")
-const moment = require("moment-timezone");
 
 exports.userRegister = async(req,res)=>{
     const {name,email,password} = req.body
@@ -9,23 +8,20 @@ exports.userRegister = async(req,res)=>{
         const userExist = await userModel.findOne({ email });
         if(userExist) return res.status(400).json({message:"user already exist,please try with another account"})
 
-        const salt = 10 
-        const hashedpass = await bcrypt.hash(password,salt)
+        const saltRounds = 10 
+        const hashedpass = await bcrypt.hash(password,saltRounds)
 
         const newuser =  new userModel({
             name,
             email,
             password:hashedpass,
             profileImg: "",
-            createdAt: moment(userModel.createdAt).tz("Asia/Kolkata").format(),
-            updatedAt: moment(userModel.updatedAt).tz("Asia/Kolkata").format()
-
         })
-        const savedata = await newuser.save()
+       await newuser.save()
         const token = await jwt.sign({id:newuser._id},process.env.JWT_SECRET,{ expiresIn: '1h' })
         res.cookie("token", token, {
             httpOnly: true,
-            secure: true,
+            secure: false,
             sameSite: 'strict',
             maxAge: 60 * 60 * 1000
         })
@@ -51,7 +47,7 @@ exports.userLogin =  async(req,res)=>{
             sameSite: 'strict',
             maxAge: 60 * 60 * 1000
         })
-        res.json({ success: true, message: "login succesfull" })
+        res.json({message: "login succesfull" })
     }
      catch(error){
         res.status(500).json({message:"internal server errror"})
@@ -65,8 +61,8 @@ exports.resetPassword = async(req,res)=>{
         if(!user) return res.status(400).json({message:"cannot find the user"})
             const match = await bcrypt.compare(req.body.password,user.password)
         if(match) return res.status(400).json({message:"password is same"})
-            const salt = 10
-            const hashpassword = await bcrypt.hash(req.body.password,salt)
+            const saltRounds = 10
+            const hashpassword = await bcrypt.hash(req.body.password,saltRounds)
             user.password= hashpassword,
             await user.save()
             res.status(200).json({message:"Reset password is successfull"})

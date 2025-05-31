@@ -5,7 +5,7 @@ const cartModel = require("../../Model/cartModel")
 exports.Order = async (req, res) => {
 
     try {
-        const { orderBy, items, paymentMethod } = req.body
+        const { items,paymentMethod } = req.body
         let total = 0
         console.log(req.body);
         console.log(items);
@@ -13,7 +13,7 @@ exports.Order = async (req, res) => {
         for (const item of items) {
             const product = await productmodel.findById(item.productId)
             if (!product) {
-                return res.status(404).json({ message: "Product not found" })
+                return res.status(404).json({message:"Product not found"})
             }
             if (product.stock < item.quantity) {
                 return (400).json({ message: "out of stock" })
