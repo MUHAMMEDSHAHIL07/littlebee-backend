@@ -13,5 +13,5 @@ router.get("/category/:categoryName",getCategory)
 router.get("/product/:id",getProductById)
 router.delete("/delete/:id",deleteProduct)
 router.patch("/editproduct/:id",upload.single("image"),EditProduct)
-// router.patch("/user/block/:id",blockAndUnBlock)
+router.patch("/user/block/:id",blockAndUnBlock)
 module.exports=router
