@@ -104,3 +104,13 @@ exports.getProductById = async(req,res)=>{
         res.status(500).json({message:"server error"})
     }
 }
+exports.deleteProduct = async(req,res)=>{
+    try{
+        const itemDelete = await Product.deleteOne(req.params.id)
+        if(!itemDelete) return res.status(404).json({message:"item not found"})
+            res.status(200).json({message:"product is deleted"})
+    }
+    catch(error){
+        res.status(500).json({message:"server error",error})
+    }
+}
