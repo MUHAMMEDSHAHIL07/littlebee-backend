@@ -11,5 +11,5 @@ router.post('/products', upload.single('image'), addProduct);
 router.get("/allproduct",getAllProduct)
 router.get("/category/:categoryName",getCategory)
 router.get("/product/:id",getProductById)
-router.get("/delete/:id",deleteProduct)
+router.delete("/delete/:id",deleteProduct)
 module.exports=router
