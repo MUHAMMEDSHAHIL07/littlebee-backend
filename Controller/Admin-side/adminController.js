@@ -127,7 +127,7 @@ exports.EditProduct = async(req,res)=>{
         product.category = req.body.category || product.category
         product.gender = req.body.gender || product.gender
         product.stock = req.body.stock || product.stock
-        product.image = 
+        product.image = image 
 
         await product.save()
         res.status(200).json({message:"product is updated",updated:product})
