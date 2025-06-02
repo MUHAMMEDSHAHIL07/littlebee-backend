@@ -32,3 +32,20 @@ exports.getCart = async(req,res)=>{
         res.status(500).json({message:"failed to get cart"})
     }
 }
+exports.removeItem = async(req,res)=>{
+    try{
+        const userId = req.user.id
+        const productId = req.params.id
+        const deleteItem = await cartModel.findOneAndDelete({
+            User:userId,
+            Product:productId
+        })
+         if (!deleteItem) {
+        return res.status(404).json({ message: "Item not found in cart" });
+    }
+        res.status(200).json({ message: "Item removed from cart" });
+    }
+    catch (error) {
+        res.status(500).json({ message: error.message });
+  }
+}

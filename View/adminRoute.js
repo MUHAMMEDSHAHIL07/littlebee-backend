@@ -14,5 +14,5 @@ router.get("/product/:id",getProductById)
 router.delete("/delete/:id",deleteProduct)
 router.patch("/editproduct/:id",upload.single("image"),EditProduct)
 router.patch("/user/block/:id",blockAndUnBlock)
-router.get("getAllOrder",getAllOrder)
+router.get("/getAllOrder",getAllOrder)
 module.exports=router

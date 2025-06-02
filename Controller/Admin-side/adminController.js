@@ -153,9 +153,10 @@ exports.blockAndUnBlock = async(req,res)=>{
 exports.getAllOrder = async(req,res)=>{
     try{
         const order = await ordermodel.find()
-        if(order.length==0){
+        if(order.length===0){
            return res.status(404).json({message:"no orders yet"})
         }
+        res.status(200).json({Orders:order})
     }
     catch(error){
         return res.status(500).json({message:"server error",error})
