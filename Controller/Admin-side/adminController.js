@@ -136,3 +136,16 @@ exports.EditProduct = async(req,res)=>{
         res.status(500).json({message:"server error",error})
     }
 }
+exports.blockAndUnBlock = async(req,res)=>{
+    try{
+        const userId = req.params.id
+        const isActive = req.body
+
+        const user = await userModel.updateOne({_id:userId},{$set:isActive})
+        if(!user) return res.status(404).json({message:"user not found"})
+        res.status(200).json({message:!req.body.isActive?"user is blocked succesfully":"user is unblocked succesfully"})
+    }
+    catch(error){
+        res.status(500).json({message:"server error",error})
+    }
+}

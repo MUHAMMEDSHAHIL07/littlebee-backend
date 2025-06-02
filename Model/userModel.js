@@ -20,10 +20,6 @@ const userSchema = new mongoose.Schema({
     profileImg:{
         type:String,
     },
-    isBlocked: {
-        type: Boolean,
-        default: false
-    },
     isActive: {
         type: Boolean,
         default: true

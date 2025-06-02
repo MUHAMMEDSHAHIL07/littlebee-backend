@@ -1,5 +1,5 @@
 const express = require("express")
-const { getallUsers, adminLogin, getUserById, getAllProduct, getCategory, getProductById, deleteProduct, EditProduct } = require("../Controller/Admin-side/adminController")
+const { getallUsers, adminLogin, getUserById, getAllProduct, getCategory, getProductById, deleteProduct, EditProduct, blockAndUnBlock } = require("../Controller/Admin-side/adminController")
 const { addProduct } = require('../Controller/Admin-side/adminController');
 const upload = require("../middleware/uploadMiddleware")
 const router = express.Router()
@@ -12,5 +12,6 @@ router.get("/allproduct",getAllProduct)
 router.get("/category/:categoryName",getCategory)
 router.get("/product/:id",getProductById)
 router.delete("/delete/:id",deleteProduct)
-router.patch("/editproduct/:id",upload.single("image",EditProduct))
+router.patch("/editproduct/:id",upload.single("image"),EditProduct)
+// router.patch("/user/block/:id",blockAndUnBlock)
 module.exports=router
