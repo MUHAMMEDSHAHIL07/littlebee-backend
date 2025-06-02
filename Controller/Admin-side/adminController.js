@@ -2,6 +2,7 @@ const bcrypt = require("bcryptjs")
 const jwt = require("jsonwebtoken")
 const userModel = require("../../Model/userModel")
 const Product = require("../../Model/productModel")
+const ordermodel = require("../../Model/orderModel")
 
 exports.getallUsers = async(req,res)=>{
     try{
@@ -147,5 +148,16 @@ exports.blockAndUnBlock = async(req,res)=>{
     }
     catch(error){
         res.status(500).json({message:"server error",error})
+    }
+}
+exports.getAllOrder = async(req,res)=>{
+    try{
+        const order = await ordermodel.find()
+        if(order.length==0){
+           return res.status(404).json({message:"no orders yet"})
+        }
+    }
+    catch(error){
+        return res.status(500).json({message:"server error",error})
     }
 }
