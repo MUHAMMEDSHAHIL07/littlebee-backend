@@ -1,5 +1,5 @@
 const express = require("express")
-const { getallUsers, adminLogin, getUserById, getAllProduct, getCategory, getProductById } = require("../Controller/Admin-side/adminController")
+const { getallUsers, adminLogin, getUserById, getAllProduct, getCategory, getProductById, deleteProduct } = require("../Controller/Admin-side/adminController")
 const { addProduct } = require('../Controller/Admin-side/adminController');
 const upload = require("../middleware/uploadMiddleware")
 const router = express.Router()
@@ -11,4 +11,5 @@ router.post('/products', upload.single('image'), addProduct);
 router.get("/allproduct",getAllProduct)
 router.get("/category/:categoryName",getCategory)
 router.get("/product/:id",getProductById)
+router.get("/delete/:id",deleteProduct)
 module.exports=router
