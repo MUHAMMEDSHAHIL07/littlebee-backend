@@ -6,9 +6,10 @@ const {allProduct, productId, productCategory} = require("../Controller/User-sid
 const { jwtMiddleware } = require("../middleware/authMiddleware")
 const { addTocart, getCart } = require("../Controller/User-side/cartController")
 const { Order, getOrder } = require("../Controller/User-side/orderContoller")
+const checkBlock = require("../middleware/checkBlocked")
 
 router.post("/register",userRegister)
-router.post("/login",userLogin)
+router.post("/login",checkBlock,userLogin)
 router.patch("/resetpassword",resetPassword)
 router.get("/product",allProduct)
 router.get("/product/:id",productId)
