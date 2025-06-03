@@ -1,4 +1,5 @@
 const cartModel = require("../../Model/cartModel")
+const ordermodel = require("../../Model/orderModel")
 const productmodel = require("../../Model/productModel")
 exports.addTocart = async(req,res)=>{
     const Productid = req.body.id
@@ -54,8 +55,29 @@ exports.buyFromCart = async(req,res)=>{
             price:product.price
         })
         total+=product.price*i.quantity
-        
+        await productmodel.findByIdAndUpdate(product._id,{
+            $inc:{
+                stock:-i.quantity
+            }
+        })    
     }
+    const newOrder ={
+        items,
+        total,
+        paymentMethod
+    }
+    const userOrder = await ordermodel.findOne({userId})
+    if(userOrder){
+        userOrder.orders.push(newOrder)
+        await userOrder.save()
+    }
+    else{
+        await ordermodel.create({
+            userId,
+            orders:[newOrder]
+        })
+    }
+    
   }
   catch(error){
     return res.status(500).json({message:"server error"})
