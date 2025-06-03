@@ -45,17 +45,17 @@ exports.buyFromCart = async(req,res)=>{
     const items = []
     let total = 0
     for(const i of cartItems){
-        const product = i.product    
-        if(product<i.quantity){
+        const products = i.Product    
+        if(products<i.quantity){
             return res.status(404).json({message:"item out of stock"})
         }
         items.push({
-            productId:product._id,
+            productId:products._id,
             quantity:i.quantity,
-            price:product.price
+            price:products.price
         })
-        total+=product.price*i.quantity
-        await productmodel.findByIdAndUpdate(product._id,{
+        total+=products.price*i.quantity
+        await productmodel.findByIdAndUpdate(products._id,{
             $inc:{
                 stock:-i.quantity
             }
@@ -81,7 +81,7 @@ exports.buyFromCart = async(req,res)=>{
     res.status(200).json({message:"order is placed succesfully"})
   }
   catch(error){
-    return res.status(500).json({message:"server error"})
+    return res.status(500).json({message:"server error"+error.message})
   }
 }
 exports.removeItem = async(req,res)=>{

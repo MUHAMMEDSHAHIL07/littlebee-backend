@@ -17,7 +17,7 @@ router.get("/category/:categoryName",productCategory)
 router.post("/addtocart",jwtMiddleware,addTocart)
 router.get("/getCart",jwtMiddleware,getCart)
 router.post("/order",jwtMiddleware,Order)
-router.post("buyfromcart",jwtMiddleware,buyFromCart)
+router.post("/buyfromcart",jwtMiddleware,buyFromCart)
 router.get("/getOrder",jwtMiddleware,getOrder)
 router.delete("/removeItem/:id",jwtMiddleware,removeItem);
 
