@@ -77,7 +77,8 @@ exports.buyFromCart = async(req,res)=>{
             orders:[newOrder]
         })
     }
-    
+    await cartModel.deleteMany({User:userId})
+    res.status(200).json({message:"order is placed succesfully"})
   }
   catch(error){
     return res.status(500).json({message:"server error"})
