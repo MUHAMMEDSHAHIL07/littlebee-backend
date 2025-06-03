@@ -1,4 +1,5 @@
 const cartModel = require("../../Model/cartModel")
+const productmodel = require("../../Model/productModel")
 exports.addTocart = async(req,res)=>{
     const Productid = req.body.id
     const userId = req.user.id
@@ -31,6 +32,34 @@ exports.getCart = async(req,res)=>{
     catch(error){
         res.status(500).json({message:"failed to get cart"})
     }
+}
+exports.buyFromCart = async(req,res)=>{
+  try{
+    const {paymentMethod} = req.body
+    const userId = req.user.id
+    const cartItems = await cartModel.find({User:userId}).populate("Product")
+    if(cartItems.length===0){
+        return res.status(404).json({message:"cart is empty"})
+    }
+    const items = []
+    let total = 0
+    for(const i of cartItems){
+        const product = i.product    
+        if(product<i.quantity){
+            return res.status(404).json({message:"item out of stock"})
+        }
+        items.push({
+            productId:product._id,
+            quantity:i.quantity,
+            price:product.price
+        })
+        total+=product.price*i.quantity
+        
+    }
+  }
+  catch(error){
+    return res.status(500).json({message:"server error"})
+  }
 }
 exports.removeItem = async(req,res)=>{
     try{

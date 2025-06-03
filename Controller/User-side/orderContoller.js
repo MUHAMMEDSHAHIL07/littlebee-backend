@@ -6,6 +6,7 @@ exports.Order = async (req, res) => {
 
     try {
         const { items,paymentMethod } = req.body
+        const userId = req.user.id
         let total = 0
         console.log(req.body);
         console.log(items);
@@ -21,24 +22,33 @@ exports.Order = async (req, res) => {
             total += product.price * item.quantity
             console.log(product);
         }
+        const newOrder = {
+            items,
+            paymentMethod,
+            total
+        }
 
-        for (const item of items) {
+        let userOrder = await orderModel.findOne({userId:userId})
+        if(userOrder){
+            userOrder.orders.push(newOrder)
+            await userOrder.save()
+        }
+        else{
+         const order = new orderModel({
+           userId:userId,
+           orders:[newOrder]
+        })
+
+        await order.save()
+        }
+            for (const item of items) {
             await productmodel.findByIdAndUpdate(
                 item.productId,
                 { $inc: { stock: -item.quantity } }
             );
 
         }
-
-        const order = new orderModel({
-            orderBy,
-            items,
-            total,
-            paymentMethod
-        })
-
-        await order.save()
-        await cartModel.deleteMany({ User: orderBy })
+        await cartModel.deleteMany({ User: userId })
         res.status(201).json({ message: "order is placed" })
     }
     catch (error) {
@@ -48,7 +58,7 @@ exports.Order = async (req, res) => {
 exports.getOrder = async(req,res)=>{
     const userId = req.user.id
     try{
-        const orderItem = await orderModel.find({orderBy:userId}).populate("orderBy")
+        const orderItem = await orderModel.find({userId:userId}).populate("orders")
         if(!orderItem){
             return res.status(404).json({message:"no orders found"})
         }
