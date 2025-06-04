@@ -2,9 +2,7 @@ const cartModel = require("../../Model/cartModel")
 const ordermodel = require("../../Model/orderModel")
 const productmodel = require("../../Model/productModel")
 exports.addTocart = async(req,res)=>{
-    const Productid = req.body.id
-    const userId = req.user.id
-
+  const { userId, Productid } = req.body;
     try{
         if(!Productid) return res.status(400).json({message:"product id not found"})
         const existingproduct = await cartModel.findOne({User:userId,Product:Productid})
@@ -21,19 +19,28 @@ exports.addTocart = async(req,res)=>{
     }
 }
 
-exports.getCart = async(req,res)=>{
-    const userId = req.user.id   
-    try{
-        const cartItem = await cartModel.find({User:userId}).populate("Product")
-        if(!cartItem){
-            return res.status(404).json({message:"no product in cart"})
-        }
-        res.status(200).json({cart:cartItem})
+exports.getCart = async (req, res) => {
+  const userId = req.user.id;
+  try {
+    const cartItem = await cartModel.find({ User: userId }).populate("Product");
+    if (cartItem.length === 0) {
+      return res.status(404).json({ message: "no product in cart" });
     }
-    catch(error){
-        res.status(500).json({message:"failed to get cart"})
-    }
-}
+    res.status(200).json({ cart: cartItem,count: cartItem.length  });
+  } catch (error) {
+    res.status(500).json({ message: "failed to get cart" });
+  }
+};
+exports.getCartCount = async (req, res) => {
+  const userId = req.user.id;
+  try {
+    const count = await cartModel.countDocuments({ User: userId });
+    res.status(200).json({ count });
+  } catch (error) {
+    res.status(500).json({ message: "Failed to get cart count" });
+  }
+};
+
 exports.buyFromCart = async(req,res)=>{
   try{
     const {paymentMethod} = req.body
