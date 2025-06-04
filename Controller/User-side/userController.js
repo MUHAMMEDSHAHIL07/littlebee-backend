@@ -47,7 +47,7 @@ exports.userLogin =  async(req,res)=>{
             sameSite: 'strict',
             maxAge: 60 * 60 * 1000
         })
-        res.json({message: "login succesfull" })
+        res.json({message: "login succesfull" ,data :getUser})
     }
      catch(error){
         res.status(500).json({message:"internal server errror"})
@@ -71,5 +71,13 @@ exports.resetPassword = async(req,res)=>{
       res.status(500).json({message:"internal server error"}) 
     }
 }
-
-
+exports.getUserByid = async(req,res)=>{
+    try{
+            const user = await userModel.findById(req.params.id)
+            if(!user) return res.status(400).json({message:"user not found"})
+            res.json(user)
+        }
+        catch(error){
+            res.status(500).json({message:"Failed to get user"})
+        }
+}

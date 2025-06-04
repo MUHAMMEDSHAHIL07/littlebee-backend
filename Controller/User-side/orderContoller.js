@@ -8,8 +8,6 @@ exports.Order = async (req, res) => {
         const { items,paymentMethod } = req.body
         const userId = req.user.id
         let total = 0
-        console.log(req.body);
-        console.log(items);
 
         for (const item of items) {
             const product = await productmodel.findById(item.productId)

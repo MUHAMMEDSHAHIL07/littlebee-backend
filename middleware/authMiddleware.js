@@ -20,3 +20,10 @@ exports.jwtMiddleware = async(req,res,next)=>{
         res.status(500).json({message:"server error"})
     }
 }
+exports.isAdmin = (req,res,next)=>{
+  const user = req.user?.role
+  if(user!=="admin"){
+    return res.status(404).json({message:"only acces by admin"})
+  }
+  next()
+}

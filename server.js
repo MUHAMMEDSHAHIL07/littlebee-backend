@@ -12,7 +12,11 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieparser())
-app.use(cors());
+app.use(cors({
+  origin: "http://localhost:5173",  
+  credentials: true
+}));
+
 app.use("/api/user/", userRouter);
 app.use("/api/admin/",adminRouter)
 

@@ -23,7 +23,7 @@ exports.adminLogin  = async(req,res)=>{
             const match = await bcrypt.compare(password,adminCheck.password)
             if(!match) return res.status(400).json({message:"password doesnot match"})
 
-                const token = jwt.sign({id:adminCheck._id},process.env.JWT_SECRET,{expiresIn: '24h'})
+                const token = jwt.sign({id:adminCheck._id,role: "admin"},process.env.JWT_SECRET,{expiresIn: '24h'})
                 res.cookie("token",token,{
                         httpOnly: true,
                         secure: false,
