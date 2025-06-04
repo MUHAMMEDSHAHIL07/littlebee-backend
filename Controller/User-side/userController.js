@@ -75,9 +75,22 @@ exports.getUserByid = async(req,res)=>{
     try{
             const user = await userModel.findById(req.params.id)
             if(!user) return res.status(400).json({message:"user not found"})
-            res.json(user)
+            res.json({data:user})
         }
         catch(error){
             res.status(500).json({message:"Failed to get user"})
         }
+}
+exports.logOut=async(req, res) =>{
+    try {
+        res.clearCookie('token', {
+            httpOnly: true,
+            secure: false,
+            sameSite: 'Strict',
+        });
+        res.status(200).json({ message: 'Logged out successfully' });
+    } catch (error) {
+        console.log(error)
+        return res.status(500).json({ success: false, message: "internal server error" })
+    }
 }
