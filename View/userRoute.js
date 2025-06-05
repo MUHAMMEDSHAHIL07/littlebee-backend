@@ -21,7 +21,7 @@ router.get("/getCart",jwtMiddleware,getCart)
 router.get("/cartcount", jwtMiddleware, getCartCount);
 router.post("/order",jwtMiddleware,Order)
 router.post("/buyfromcart",jwtMiddleware,buyFromCart)
-    router.get("/getOrder",jwtMiddleware,getOrder)
+router.get("/getOrder",jwtMiddleware,getOrder)
 router.delete("/removeItem/:id",jwtMiddleware,removeItem);
 router.patch('/updateQuantity/:id', jwtMiddleware,updateQuantity);
 
