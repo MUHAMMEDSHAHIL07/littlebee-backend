@@ -5,41 +5,42 @@ const cartModel = require("../../Model/cartModel")
 exports.Order = async (req, res) => {
 
     try {
-        const { items,paymentMethod } = req.body
+        const { items, paymentMethod } = req.body
         const userId = req.user.id
         let total = 0
 
         for (const item of items) {
             const product = await productmodel.findById(item.productId)
             if (!product) {
-                return res.status(404).json({message:"Product not found"})
+                return res.status(404).json({ message: "Product not found" })
             }
             if (product.stock < item.quantity) {
                 return (400).json({ message: "out of stock" })
             }
             total += product.price * item.quantity
-            console.log(product);
+            item.name = product.name;
+            item.image = product.image;
+            item.price = product.price;
         }
         const newOrder = {
             items,
             paymentMethod,
             total
         }
-
-        let userOrder = await orderModel.findOne({userId:userId})
-        if(userOrder){
+        let userOrder = await orderModel.findOne({ userId: userId })
+        if (userOrder) {
             userOrder.orders.push(newOrder)
             await userOrder.save()
         }
-        else{
-         const order = new orderModel({
-           userId:userId,
-           orders:[newOrder]
-        })
+        else {
+            const order = new orderModel({
+                userId: userId,
+                orders: [newOrder]
+            })
 
-        await order.save()
+            await order.save()
         }
-            for (const item of items) {
+        for (const item of items) {
             await productmodel.findByIdAndUpdate(
                 item.productId,
                 { $inc: { stock: -item.quantity } }
@@ -53,16 +54,16 @@ exports.Order = async (req, res) => {
         res.status(500).json("server error" + error)
     }
 }
-exports.getOrder = async(req,res)=>{
+exports.getOrder = async (req, res) => {
     const userId = req.user.id
-    try{
-        const orderItem = await orderModel.find({userId:userId}).populate("orders")
-        if(!orderItem){
-            return res.status(404).json({message:"no orders found"})
+    try {
+        const orderItem = await orderModel.find({ userId: userId });
+        if (!orderItem) {
+            return res.status(404).json({ message: "no orders found" })
         }
-        res.status(200).json({order:orderItem})
+        res.status(200).json({ orders: orderItem })
     }
-    catch(error){
-        res.status(500).json({message:"failed to get"})
+    catch (error) {
+        res.status(500).json({ message: "failed to get" })
     }
 }

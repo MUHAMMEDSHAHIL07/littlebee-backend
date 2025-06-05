@@ -108,3 +108,21 @@ exports.removeItem = async(req,res)=>{
         res.status(500).json({ message: error.message });
   }
 }
+exports.updateQuantity = async (req, res) => {
+  const userId = req.user.id;
+  const productId = req.params.id;
+  const { quantity } = req.body;
+
+  if (quantity < 1) return res.status(400).json({ message: "Invalid quantity" });
+
+  try {
+    const cartItem = await cartModel.findOne({ User: userId, Product: productId });
+    if (!cartItem) return res.status(404).json({ message: "Item not found in cart" });
+
+    cartItem.quantity = quantity;
+    await cartItem.save();
+    res.status(200).json({ message: "Quantity updated" });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};

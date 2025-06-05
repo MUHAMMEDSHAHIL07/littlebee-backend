@@ -1,5 +1,5 @@
 const express = require("express")
-const { getallUsers, adminLogin, getUserById, getAllProduct, getCategory, getProductById, deleteProduct, EditProduct, blockAndUnBlock, getAllOrder } = require("../Controller/Admin-side/adminController")
+const { getallUsers, adminLogin, getUserById, getAllProduct, getCategory, getProductById, deleteProduct, EditProduct, blockAndUnBlock, getAllOrder, getAdmin } = require("../Controller/Admin-side/adminController")
 const { addProduct } = require('../Controller/Admin-side/adminController');
 const upload = require("../middleware/uploadMiddleware");
 const { isAdmin, jwtMiddleware } = require("../middleware/authMiddleware");
@@ -7,6 +7,7 @@ const router = express.Router()
 
 router.get("/users",jwtMiddleware,isAdmin,getallUsers)
 router.post("/login",adminLogin)
+router.get("/me",isAdmin,getAdmin)
 router.get("/users/:id",jwtMiddleware,isAdmin,getUserById)
 router.post('/products', upload.single('image'),jwtMiddleware,isAdmin, addProduct);
 router.get("/allproduct",jwtMiddleware,isAdmin,getAllProduct)

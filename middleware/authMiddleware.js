@@ -21,13 +21,23 @@ exports.jwtMiddleware = async(req,res,next)=>{
         res.status(500).json({message:"server error"})
     }
 }
-exports.isAdmin = (req,res,next)=>{
-  const user = req.user?.role
-  if(user!=="admin"){
-    return res.status(404).json({message:"only acces by admin"})
+exports.isAdmin = (req, res, next) => {
+  const token = req.cookies.token;
+  if (!token) {
+    return res.status(401).json({ message: "No token, admin unauthorized" });
   }
-  next()
-}
+
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    if (decoded.role !== "admin") {
+      return res.status(403).json({ message: "Not an admin" });
+    }
+    req.admin = decoded;
+    next();
+  } catch (err) {
+    res.status(401).json({ message: "Invalid token" });
+  }
+};
 exports.getUserFromToken = async (req, res) => {
   try {
     const token = req.cookies.token;

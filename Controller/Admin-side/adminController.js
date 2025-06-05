@@ -36,6 +36,11 @@ exports.adminLogin  = async(req,res)=>{
         res.status(500).json({message:"internal server error"})
     }
 }
+exports.getAdmin = (req, res) => {
+  const adminData = req.admin; 
+  res.status(200).json({ message: "Admin verified", data: adminData });
+};
+
 exports.getUserById = async(req,res)=>{
     try{
         const userId = req.params.id
@@ -57,12 +62,12 @@ exports.addProduct = async(req,res)=>{
         }
         const newProduct = new Product({
         name,
-        description,
         price,
+        image:image,
         category,
         gender,
         stock,
-        image:image
+      
     })
     await newProduct.save()
     res.status(201).json({
