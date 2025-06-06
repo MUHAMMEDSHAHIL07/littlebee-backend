@@ -2,6 +2,7 @@ const bcrypt = require("bcryptjs")
 const jwt = require("jsonwebtoken")
 const userModel = require("../../Model/userModel")
 const Product = require("../../Model/productModel")
+const ordermodel = require("../../Model/orderModel")
 
 exports.getallUsers = async(req,res)=>{
     try{
@@ -145,7 +146,6 @@ exports.blockAndUnBlock = async(req,res)=>{
     try{
         const userId = req.params.id
         const isActive = req.body
-
         const user = await userModel.updateOne({_id:userId},{$set:isActive})
         if(!user) return res.status(404).json({message:"user not found"})
         res.status(200).json({message:!req.body.isActive?"user is blocked succesfully":"user is unblocked succesfully"})
@@ -163,6 +163,6 @@ exports.getAllOrder = async(req,res)=>{
         res.status(200).json({Orders:order})
     }
     catch(error){
-        return res.status(500).json({message:"server error",error})
+        return res.status(500).json({message:"server error"+error.message})
     }
 }

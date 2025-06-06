@@ -47,8 +47,6 @@ exports.buyFromCart = async (req, res) => {
   try {
     const { paymentMethod } = req.body;
     const userId = req.user.id;
-
-
     const cartItems = await cartModel.find({ User: userId }).populate("Product");
 
     if (cartItems.length === 0) {
@@ -63,6 +61,7 @@ exports.buyFromCart = async (req, res) => {
 
 
       if (product.stock < i.quantity) {
+         console.log("Out of stock item found");
         return res.status(400).json({ message: `Item '${product.name}' is out of stock` });
       }
 
