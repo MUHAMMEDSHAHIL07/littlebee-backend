@@ -1,6 +1,7 @@
 const cartModel = require("../../Model/cartModel")
 const ordermodel = require("../../Model/orderModel")
 const productmodel = require("../../Model/productModel")
+
 exports.addTocart = async(req,res)=>{
   const { userId, Productid } = req.body;
     try{
@@ -31,6 +32,7 @@ exports.getCart = async (req, res) => {
     res.status(500).json({ message: "failed to get cart" });
   }
 };
+
 exports.getCartCount = async (req, res) => {
   const userId = req.user.id;
   try {

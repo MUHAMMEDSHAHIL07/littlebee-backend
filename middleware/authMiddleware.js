@@ -38,6 +38,7 @@ exports.isAdmin = (req, res, next) => {
     res.status(401).json({ message: "Invalid token" });
   }
 };
+
 exports.getUserFromToken = async (req, res) => {
   try {
     const token = req.cookies.token;
