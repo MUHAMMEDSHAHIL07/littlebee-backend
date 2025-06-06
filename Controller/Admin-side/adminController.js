@@ -2,7 +2,6 @@ const bcrypt = require("bcryptjs")
 const jwt = require("jsonwebtoken")
 const userModel = require("../../Model/userModel")
 const Product = require("../../Model/productModel")
-const ordermodel = require("../../Model/orderModel")
 
 exports.getallUsers = async(req,res)=>{
     try{

@@ -5,6 +5,7 @@ const mongoose = require("mongoose");
 const userRouter = require("./View/userRoute");
 const adminRouter = require("./View/adminRoute")
 const cookieparser = require("cookie-parser")
+const paymentRoutes = require("./View/paymentRoutes");
 
 dotenv.config();
 
@@ -19,6 +20,7 @@ app.use(cors({
 
 app.use("/api/user/", userRouter);
 app.use("/api/admin/",adminRouter)
+app.use("/api/payment/", paymentRoutes)
 
 mongoose.connect(process.env.MONGO_URI)
 .then(() => {
