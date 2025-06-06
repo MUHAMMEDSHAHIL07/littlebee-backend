@@ -7,7 +7,8 @@ const ordermodel = require("../../Model/orderModel")
 exports.getallUsers = async(req,res)=>{
     try{
         const usersData = await userModel.find()
-        res.status(200).json({data:usersData})
+        const user = req.user.id
+        res.status(200).json({data:usersData,user:user})
     }
     catch(error){
         res.status(500).json({message:"cant get users",error})
@@ -82,7 +83,8 @@ exports.addProduct = async(req,res)=>{
 exports.getAllProduct = async(req,res)=>{
     try{
         const product = await Product.find()
-        res.status(200).json({products:product})
+        const user=req.user.id
+        res.status(200).json({products:product,user:user})
     }
     catch(error){
         res.status(500).json({message:"server error"})
