@@ -13,7 +13,7 @@ exports.createRazorpayOrder = async (req, res) => {
     const order = await instance.orders.create(options);
     res.status(200).json(order);
   } catch (err) {
-    console.error("Razorpay create order error:", err); // log this
+    console.error("Razorpay create order error:", err); 
     res.status(500).json({ error: "Failed to create order" });
   }
 };
