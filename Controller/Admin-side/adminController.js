@@ -18,7 +18,7 @@ exports.adminLogin  = async(req,res)=>{
     try{
         const email=req.body.email
         const password = req.body.password
-        const adminCheck = await userModel.findOne({email:email,role:"admin"})
+        const adminCheck = await userModel.findOne({email:email,rol:"admin"})
 
         if(!adminCheck) return res.status(400).json({message:"invalid details"})
             const match = await bcrypt.compare(password,adminCheck.password)
