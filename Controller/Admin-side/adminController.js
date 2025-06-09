@@ -27,8 +27,8 @@ exports.adminLogin  = async(req,res)=>{
                 const token = jwt.sign({id:adminCheck._id,role: "admin"},process.env.JWT_SECRET,{expiresIn: '24h'})
                 res.cookie("token",token,{
                         httpOnly: true,
-                        secure: false,
-                        sameSite: 'strict',
+                        secure: true,
+                        sameSite: 'None',
                         maxAge: 60 * 60 * 1000
                 })
                 res.status(200).json({message:"login succesfull"})
