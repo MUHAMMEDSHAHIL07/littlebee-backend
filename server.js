@@ -14,28 +14,26 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieparser());
 
-// ✅ CORS fix
 const allowedOrigins = ["https://littlebee-jade.vercel.app"];
 app.use(cors({
   origin: function (origin, callback) {
-    // Allow requests with no origin (like mobile apps, Postman)
     if (!origin || allowedOrigins.includes(origin)) {
       callback(null, true);
     } else {
       callback(new Error("Not allowed by CORS"));
     }
   },
-  credentials: true, // ✅ VERY important for cookies
+  credentials: true, 
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"],
   allowedHeaders: ["Content-Type", "Authorization"],
 }));
 
-// ✅ Routes
+
 app.use("/api/user/", userRouter);
 app.use("/api/admin/", adminRouter);
 app.use("/api/payment/", paymentRoutes);
 
-// ✅ DB Connect
+
 mongoose.connect(process.env.MONGO_URI)
   .then(() => {
     console.log("MongoDB connected");
